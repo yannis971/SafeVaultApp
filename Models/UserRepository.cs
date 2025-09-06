@@ -1,5 +1,5 @@
 
-using MySql.Data.MySqlClient;
+using Microsoft.Data.SqlClient;
 
 public class UserRepository
 {
@@ -7,23 +7,21 @@ public class UserRepository
 
     public User GetUserByUsername(string username)
     {
-        using var connection = new MySqlConnection(connectionString);
+        using var connection = new SqlConnection(connectionString);
         connection.Open();
 
         var query = "SELECT UserID, Username, Email FROM Users WHERE Username = @username";
-        using var command = new MySqlCommand(query, connection);
+        using var command = new SqlCommand(query, connection);
         command.Parameters.AddWithValue("@username", username);
 
         using var reader = command.ExecuteReader();
         if (reader.Read())
-        {
             return new User
             {
-                UserID = reader.GetInt32("UserID"),
-                Username = reader.GetString("Username"),
-                Email = reader.GetString("Email")
+                UserID = reader.GetInt32(reader.GetOrdinal("UserID")),
+                Username = reader.GetString(reader.GetOrdinal("Username")),
+                Email = reader.GetString(reader.GetOrdinal("Email"))
             };
-        }
 
         return null;
     }

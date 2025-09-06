@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
+
 [TestFixture]
 public class TestAuthentication
 {
@@ -19,6 +20,8 @@ public class TestAuthentication
         });
 
         var response = await client.PostAsync("http://localhost:5000/login", content);
-        Assert.AreEqual(System.Net.HttpStatusCode.Unauthorized, response.StatusCode);
+        //Assert.AreEqual(System.Net.HttpStatusCode.Unauthorized, response.StatusCode);
+        Assert.Equals(System.Net.HttpStatusCode.Unauthorized, response.StatusCode);
+
     }
 }

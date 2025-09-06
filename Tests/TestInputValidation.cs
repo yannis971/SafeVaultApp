@@ -1,8 +1,9 @@
-
 using NUnit.Framework;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using NUnit.Framework.Interfaces;
+using NUnit.Framework.Legacy;
 
 [TestFixture]
 public class TestInputValidation
@@ -21,7 +22,8 @@ public class TestInputValidation
         var response = await client.PostAsync("http://localhost:5000/submit", content);
         var responseText = await response.Content.ReadAsStringAsync();
 
-        Assert.IsFalse(responseText.Contains("DROP"), "SQL Injection vulnerability detected");
+        //Assert.False(responseText.Contains("DROP"), "SQL Injection vulnerability detected");
+        StringAssert.DoesNotContain("DROP", responseText, "SQL Injection vulnerability detected");
     }
 
     [Test]
@@ -36,6 +38,7 @@ public class TestInputValidation
         var response = await client.PostAsync("http://localhost:5000/submit", content);
         var responseText = await response.Content.ReadAsStringAsync();
 
-        Assert.IsFalse(responseText.Contains("<script>"), "XSS vulnerability detected");
+        //Assert.False(responseText.Contains("<script>"), "XSS vulnerability detected");
+        StringAssert.DoesNotContain("<script>", responseText, "XSS vulnerability detected");
     }
 }
