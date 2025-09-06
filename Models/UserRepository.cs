@@ -12,7 +12,8 @@ public class UserRepository
 
         var query = "SELECT UserID, Username, Email FROM Users WHERE Username = @username";
         using var command = new SqlCommand(query, connection);
-        command.Parameters.AddWithValue("@username", username);
+        var safeUsername = InputSanitizer.SanitizeUsername(username);
+        command.Parameters.AddWithValue("@username", safeUsername);
 
         using var reader = command.ExecuteReader();
         if (reader.Read())
